@@ -3,7 +3,10 @@ import axios from "axios";
 
 export function MovieForm(props) {
 
+  // Instantiate the movie id, getting it from the props history
   const id = props.match.params.id;
+
+  // Create a new slice of state for the movie edit form with the properties for each input field
   const [movieForm, setMovieForm] = useState({
     id,
     title: "",
@@ -12,6 +15,7 @@ export function MovieForm(props) {
     stars: []
   });
 
+  // Send a get request passing in the id of the movie you want to get and save the response to the movie form
   const getMovie = id => {
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
@@ -23,6 +27,8 @@ export function MovieForm(props) {
     getMovie(id);
   }, [id]);
 
+  // Manage the form input state (controlled input)
+  // stars is an array and so must be represented as such in the input state
   const inputChange = evt => {
     setMovieForm({
       ...movieForm,
@@ -33,11 +39,16 @@ export function MovieForm(props) {
     });
   };
 
-  const updateMovie = () => {};
+  // Create a function to update the movie information on click of the update button
+  const updateMovie = (evt) => {
+    evt.preventDefault();
 
-  // GET CARD DETAILS USING AXIOS AND CARD ID AND SET TO FORM STATE SO YOU CAN POPULATE THE FORM TO EDIT
-  // HANDLECHANGE
-  // HANDLESUBMIT
+    axios.put(`http://localhost:5000/api/movies/${id}`, movieForm)
+      .then(res => {
+        props.history.push(`/movies/${id}`);
+      })
+      .catch(err => console.error(err.message));
+  };
 
   return (
     <div>
@@ -82,7 +93,7 @@ export function MovieForm(props) {
           />
         </label>
         <br /> <br />
-        <button>Update Movie</button>
+        <button onClick={updateMovie}>Update Movie</button>
       </form>
     </div>
   );

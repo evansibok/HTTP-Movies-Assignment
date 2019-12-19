@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { Link } from 'react-router-dom'
 import MovieCard from "./MovieCard";
-import MovieForm from "./MovieForm";
 
 export default class Movie extends React.Component {
   constructor(props) {
@@ -26,7 +25,7 @@ export default class Movie extends React.Component {
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
       .then(res => this.setState({ movie: res.data }))
-      .catch(err => console.log(err.response));
+      .catch(err => console.error(err.response));
   };
 
   saveMovie = () => {
